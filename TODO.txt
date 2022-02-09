@@ -1,0 +1,28 @@
+# TODO
+## Code changes and examples that would benefit the framework
+
+- Make a version based on glfw.
+    - Qt is used for windowing and some cross-platform path manipulation. The interesting code should all be separated across the GLGUI (Qt) to GLScene (no Qt) divide. The mouse event class does leak across, but that should be easy to change. To rip out path manipulation, one can either assume "/" as the path separator, which windows can actually handle, or one can use the C++17 filesystem class. To implement live reloading, one can implement filewatcher with polling (stat() is pretty much cross platform or there is C++17 filesystem::last_write_time) or else James Wynn's FileWatcher is cross-platform: https://github.com/jameswynn/simplefilewatcher
+
+- More examples:
+    - image processing
+    - ray marching a la shadertoy
+    - animation
+    - ambient occlusion
+
+- Framebuffer objects https://open.gl/framebuffers
+    - Drawable has a Framebuffer
+    - Framebuffer can be default (need a captureDefaultID() to be called at init time): https://stackoverflow.com/questions/11617013/why-would-glbindframebuffergl-framebuffer-0-result-in-blank-screen-in-cocos2d
+        
+        // glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+        GLint dfb;
+        glGetIntegerv( GL_FRAMEBUFFER_BINDING, &dfb );
+        glBindFramebuffer( GL_FRAMEBUFFER, dfb );
+        
+    - Framebuffer can set color and depth textures
+        - Texture2D needs a constructor that takes width and height and leaves m_image_path blank; reload() needs to skip the upload in this case.
+        - Texture2D could use a save( path ) method.
+
+- Framebuffer demos:
+    - render to face of cube
+    - 2D post-processing
